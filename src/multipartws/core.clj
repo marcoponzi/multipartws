@@ -1,11 +1,20 @@
 (ns multipartws.core
   (:use [org.httpkit.server :only [run-server]])
-  (:require [ring.middleware.reload :as reload]))
+  (:require [clojure.tools.logging :as log]
+            [ring.middleware.reload :as reload]))
 
-(defn app [req]
-  {:status  200
+(defn handler [request]
+  (println "bef")
+  (log/info "TESTLOG")
+  (println "aft")
+  {:status 200
    :headers {"Content-Type" "text/html"}
-   :body    "hello HTTP! 3" })
+   :body "Hello Worldfdsafsafadsf"})
+
+
+(def app 
+ handler
+)
 
 (defn -main [& args]
     (run-server (reload/wrap-reload #'app) {:port 8080}))
