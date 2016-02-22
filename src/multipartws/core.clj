@@ -9,6 +9,9 @@
 (use 'ring.middleware.params
      'ring.middleware.multipart-params)
 
+; TODO configuration via property file
+; copy via ssh
+
 (defn handler [{params :params}] 
   
   (log/info "handler start")
