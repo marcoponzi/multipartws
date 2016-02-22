@@ -4,10 +4,21 @@
             [clojure.java.io :as io]
             [ring.middleware.reload :as reload]
             [ring.middleware.params :as params]
-            [ring.middleware.multipart-params :as multipart-params]))
+            [ring.middleware.multipart-params :as multipart-params])
+   (:import [java.io PushbackReader]))
 
+ 
 (use 'ring.middleware.params
      'ring.middleware.multipart-params)
+
+;; read configuration file
+
+;; (def conf (with-open [r (io/reader "props.clj")]
+;;             (read (PushbackReader. r))))
+
+(def config (delay (load-file (.getFile (io/resource "props.clj")))))
+(defn get-config []
+  (force config))
 
 ; TODO configuration via property file
 ; copy via ssh
@@ -50,5 +61,5 @@
 
 
 (defn -main [& args]
-    (run-server (reload/wrap-reload #'app) {:port 8080}))
+    (run-server (reload/wrap-reload #'app) {:port (:service-port (get-config))}))
 
